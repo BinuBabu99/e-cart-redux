@@ -1,8 +1,11 @@
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
+import { searchProduct } from '../redux/slices/productSlice';
 
 const Header = ({ insideHome }) => {
+    const dispatch = useDispatch()
+    const userCart = useSelector(state=>state.cartReducer)
     const userWishlist = useSelector((state) => state.wishlistReducer);
 
 
@@ -16,6 +19,7 @@ const Header = ({ insideHome }) => {
         {insideHome && (
           <li className="list-none inline-block px-5">
             <input
+              onChange={(e) => dispatch(searchProduct(e.target.value.toLowerCase()))}
               style={{ width: "300px" }}
               className="rounded p-2 border "
               placeholder='"Search products Name'
@@ -36,7 +40,9 @@ const Header = ({ insideHome }) => {
         <li className="list-none inline-block px-5">
           <Link to={"/cart"}>
             <i className="fa-solid fa-cart-plus text-green-600"></i>Cart{" "}
-            <span className="bg-black text-white rounded p-1">20</span>
+            <span className="bg-black text-white rounded p-1">
+              {userCart?.length}
+            </span>
           </Link>
         </li>
       </ul>
